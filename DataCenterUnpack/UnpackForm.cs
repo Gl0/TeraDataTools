@@ -44,9 +44,9 @@ namespace DataCenterUnpack
                 var keyString = Key.Text.Replace(" ", "");
                 var ivString = IV.Text.Replace(" ", "");
 
-                var key = Unpacker.StringToByteArray(keyString);
-                var iv = Unpacker.StringToByteArray(ivString);
-                Unpacker.Unpack(InputFile.Text, InputFile.Text, key, iv);
+                var key = DcUnpacker.StringToByteArray(keyString);
+                var iv = DcUnpacker.StringToByteArray(ivString);
+                DcUnpacker.Unpack(InputFile.Text, InputFile.Text, key, iv);
 
                 GC.Collect();
 

@@ -56,7 +56,7 @@
     <Compile Include="KeyScanner.cs" />
     <Compile Include="MemoryScanner.cs" />
     <Compile Include="NoPaddingTransformWrapper.cs" />
-    <Compile Include="Unpacker.cs" />
+    <Compile Include="DcUnpacker.cs" />
     <Compile Include="UnpackForm.cs">
       <SubType>Form</SubType>
     </Compile>
