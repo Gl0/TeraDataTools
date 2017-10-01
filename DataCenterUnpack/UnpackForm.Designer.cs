@@ -205,6 +205,7 @@
             // 
             this.ResourcesPathTb.Location = new System.Drawing.Point(11, 25);
             this.ResourcesPathTb.Name = "ResourcesPathTb";
+            this.ResourcesPathTb.ReadOnly = true;
             this.ResourcesPathTb.Size = new System.Drawing.Size(342, 20);
             this.ResourcesPathTb.TabIndex = 7;
             // 
@@ -281,6 +282,7 @@
             // 
             this.ResourcesOutputDir.Location = new System.Drawing.Point(70, 50);
             this.ResourcesOutputDir.Name = "ResourcesOutputDir";
+            this.ResourcesOutputDir.ReadOnly = true;
             this.ResourcesOutputDir.Size = new System.Drawing.Size(283, 20);
             this.ResourcesOutputDir.TabIndex = 12;
             // 
