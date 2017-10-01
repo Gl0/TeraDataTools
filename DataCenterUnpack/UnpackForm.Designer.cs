@@ -293,7 +293,7 @@
             this.ClientSize = new System.Drawing.Size(418, 181);
             this.Controls.Add(this.UnpackDCTab);
             this.Name = "UnpackForm";
-            this.Text = "DateCenter Unpacker";
+            this.Text = "DataCenter Unpacker";
             this.UnpackDCTab.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
