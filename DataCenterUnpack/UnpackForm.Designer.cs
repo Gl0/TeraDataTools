@@ -32,7 +32,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.Go = new System.Windows.Forms.Button();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.DcFileFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.Key = new System.Windows.Forms.TextBox();
             this.IV = new System.Windows.Forms.TextBox();
@@ -91,10 +91,9 @@
             this.Go.UseVisualStyleBackColor = true;
             this.Go.Click += new System.EventHandler(this.Go_Click);
             // 
-            // openFileDialog1
+            // DcFileFileDialog
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            this.openFileDialog1.Filter = "Date Center|DataCenter_Final_*.dat|All Files|*.*";
+            this.DcFileFileDialog.Filter = "Data Center files|DataCenter_Final_*.dat|All Files|*.*";
             // 
             // Key
             // 
@@ -265,7 +264,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button Go;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.OpenFileDialog DcFileFileDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.TextBox Key;
         private System.Windows.Forms.TextBox IV;

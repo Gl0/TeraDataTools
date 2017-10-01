@@ -22,9 +22,9 @@ namespace DataCenterUnpack
 
         private void BrowseInput_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (DcFileFileDialog.ShowDialog() == DialogResult.OK)
             {
-                InputFile.Text = openFileDialog1.FileName;
+                InputFile.Text = DcFileFileDialog.FileName;
             }
         }
 
