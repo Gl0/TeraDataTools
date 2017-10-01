@@ -25,9 +25,18 @@ namespace DataCenterUnpack
             if (DcFileFileDialog.ShowDialog() == DialogResult.OK)
             {
                 InputFile.Text = DcFileFileDialog.FileName;
+                outputDir.Text = Path.GetDirectoryName(InputFile.Text);
             }
         }
 
+        private void BrowseResourcesInput_Click(object sender, EventArgs e)
+        {
+            if (ResourcesFileFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                ResourcesPathTb.Text = ResourcesFileFileDialog.FileName;
+                ResourcesOutputDir.Text = Path.GetDirectoryName(ResourcesPathTb.Text);
+            }
+        }
         private void Go_Click(object sender, EventArgs e)
         {
             try
@@ -67,5 +76,20 @@ namespace DataCenterUnpack
             }
         }
 
+        private void BrowseOutput_Click(object sender, EventArgs e)
+        {
+            if (DcOutputFolderDialog.ShowDialog() == DialogResult.OK)
+            {
+                outputDir.Text = DcOutputFolderDialog.SelectedPath;
+            }
+        }
+
+        private void DownloadedResBrowseDir_Click(object sender, EventArgs e)
+        {
+            if (ResourcesOutputFolderDialog.ShowDialog() == DialogResult.OK)
+            {
+                ResourcesOutputDir.Text = ResourcesOutputFolderDialog.SelectedPath;
+            }
+        }
     }
 }
