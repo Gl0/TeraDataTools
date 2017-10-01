@@ -41,19 +41,19 @@
             this.FindKeyButton = new System.Windows.Forms.Button();
             this.UnpackDCTab = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label4 = new System.Windows.Forms.Label();
-            this.ResourcesPathTb = new System.Windows.Forms.TextBox();
             this.outputDir = new System.Windows.Forms.TextBox();
             this.BrowseOutput = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.BrowseResourcesInput = new System.Windows.Forms.Button();
-            this.ResourcesFileFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.DcOutputFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.DownloadedResBrowseDir = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.ResourcesOutputDir = new System.Windows.Forms.TextBox();
+            this.BrowseResourcesInput = new System.Windows.Forms.Button();
+            this.ResourcesUnpack = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.ResourcesPathTb = new System.Windows.Forms.TextBox();
+            this.ResourcesFileFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.DcOutputFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.ResourcesOutputFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.UnpackDCTab.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -175,40 +175,6 @@
             this.tabPage1.Text = "Unpack DC";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.DownloadedResBrowseDir);
-            this.tabPage2.Controls.Add(this.label6);
-            this.tabPage2.Controls.Add(this.ResourcesOutputDir);
-            this.tabPage2.Controls.Add(this.BrowseResourcesInput);
-            this.tabPage2.Controls.Add(this.button1);
-            this.tabPage2.Controls.Add(this.label4);
-            this.tabPage2.Controls.Add(this.ResourcesPathTb);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(392, 137);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Unpack DownloadedResources";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(163, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "DownloadedResources.dat path:";
-            // 
-            // ResourcesPathTb
-            // 
-            this.ResourcesPathTb.Location = new System.Drawing.Point(11, 25);
-            this.ResourcesPathTb.Name = "ResourcesPathTb";
-            this.ResourcesPathTb.ReadOnly = true;
-            this.ResourcesPathTb.Size = new System.Drawing.Size(342, 20);
-            this.ResourcesPathTb.TabIndex = 7;
-            // 
             // outputDir
             // 
             this.outputDir.Location = new System.Drawing.Point(54, 76);
@@ -236,28 +202,22 @@
             this.label5.TabIndex = 12;
             this.label5.Text = "Output";
             // 
-            // button1
+            // tabPage2
             // 
-            this.button1.Location = new System.Drawing.Point(11, 91);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Unpack";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // BrowseResourcesInput
-            // 
-            this.BrowseResourcesInput.Location = new System.Drawing.Point(359, 25);
-            this.BrowseResourcesInput.Name = "BrowseResourcesInput";
-            this.BrowseResourcesInput.Size = new System.Drawing.Size(27, 22);
-            this.BrowseResourcesInput.TabIndex = 10;
-            this.BrowseResourcesInput.Text = "...";
-            this.BrowseResourcesInput.UseVisualStyleBackColor = true;
-            this.BrowseResourcesInput.Click += new System.EventHandler(this.BrowseResourcesInput_Click);
-            // 
-            // ResourcesFileFileDialog
-            // 
-            this.ResourcesFileFileDialog.Filter = "DownloadedResources files|DownloadedResources.dat|All Files|*.*";
+            this.tabPage2.Controls.Add(this.DownloadedResBrowseDir);
+            this.tabPage2.Controls.Add(this.label6);
+            this.tabPage2.Controls.Add(this.ResourcesOutputDir);
+            this.tabPage2.Controls.Add(this.BrowseResourcesInput);
+            this.tabPage2.Controls.Add(this.ResourcesUnpack);
+            this.tabPage2.Controls.Add(this.label4);
+            this.tabPage2.Controls.Add(this.ResourcesPathTb);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(392, 137);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Unpack DownloadedResources";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // DownloadedResBrowseDir
             // 
@@ -285,6 +245,47 @@
             this.ResourcesOutputDir.ReadOnly = true;
             this.ResourcesOutputDir.Size = new System.Drawing.Size(283, 20);
             this.ResourcesOutputDir.TabIndex = 12;
+            // 
+            // BrowseResourcesInput
+            // 
+            this.BrowseResourcesInput.Location = new System.Drawing.Point(359, 25);
+            this.BrowseResourcesInput.Name = "BrowseResourcesInput";
+            this.BrowseResourcesInput.Size = new System.Drawing.Size(27, 22);
+            this.BrowseResourcesInput.TabIndex = 10;
+            this.BrowseResourcesInput.Text = "...";
+            this.BrowseResourcesInput.UseVisualStyleBackColor = true;
+            this.BrowseResourcesInput.Click += new System.EventHandler(this.BrowseResourcesInput_Click);
+            // 
+            // ResourcesUnpack
+            // 
+            this.ResourcesUnpack.Location = new System.Drawing.Point(11, 91);
+            this.ResourcesUnpack.Name = "ResourcesUnpack";
+            this.ResourcesUnpack.Size = new System.Drawing.Size(75, 23);
+            this.ResourcesUnpack.TabIndex = 8;
+            this.ResourcesUnpack.Text = "Unpack";
+            this.ResourcesUnpack.UseVisualStyleBackColor = true;
+            this.ResourcesUnpack.Click += new System.EventHandler(this.ResourcesUnpack_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(163, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "DownloadedResources.dat path:";
+            // 
+            // ResourcesPathTb
+            // 
+            this.ResourcesPathTb.Location = new System.Drawing.Point(11, 25);
+            this.ResourcesPathTb.Name = "ResourcesPathTb";
+            this.ResourcesPathTb.ReadOnly = true;
+            this.ResourcesPathTb.Size = new System.Drawing.Size(342, 20);
+            this.ResourcesPathTb.TabIndex = 7;
+            // 
+            // ResourcesFileFileDialog
+            // 
+            this.ResourcesFileFileDialog.Filter = "DownloadedResources files|DownloadedResources.dat|All Files|*.*";
             // 
             // UnpackForm
             // 
@@ -325,7 +326,7 @@
         private System.Windows.Forms.Button BrowseOutput;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button BrowseResourcesInput;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button ResourcesUnpack;
         private System.Windows.Forms.OpenFileDialog ResourcesFileFileDialog;
         private System.Windows.Forms.FolderBrowserDialog DcOutputFolderDialog;
         private System.Windows.Forms.Button DownloadedResBrowseDir;

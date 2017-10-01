@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using SharpDisasm;
-using SharpDisasm.Udis86;
 
 namespace DataCenterUnpack
 {
@@ -46,11 +38,11 @@ namespace DataCenterUnpack
 
                 var key = DcUnpacker.StringToByteArray(keyString);
                 var iv = DcUnpacker.StringToByteArray(ivString);
-                DcUnpacker.Unpack(InputFile.Text, InputFile.Text, key, iv);
+                DcUnpacker.Unpack(InputFile.Text, outputDir.Text, key, iv);
 
                 GC.Collect();
 
-                MessageBox.Show("done");
+                MessageBox.Show("Done!");
             }
             catch (ApplicationException ex)
             {
@@ -89,6 +81,22 @@ namespace DataCenterUnpack
             if (ResourcesOutputFolderDialog.ShowDialog() == DialogResult.OK)
             {
                 ResourcesOutputDir.Text = ResourcesOutputFolderDialog.SelectedPath;
+            }
+        }
+
+        private void ResourcesUnpack_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                ResourcesUnpacker.Unpack(ResourcesPathTb.Text, ResourcesOutputDir.Text);
+
+                GC.Collect();
+
+                MessageBox.Show("Done!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }
