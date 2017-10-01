@@ -37,8 +37,8 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharpDisasm">
-      <HintPath>..\libs\SharpDisasm.dll</HintPath>
+    <Reference Include="SharpDisasm, Version=1.1.5.0, Culture=neutral, PublicKeyToken=71afd155bcebae3e, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDisasm.1.1.5\lib\net45\SharpDisasm.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,6 +57,7 @@
     <Compile Include="MemoryScanner.cs" />
     <Compile Include="NoPaddingTransformWrapper.cs" />
     <Compile Include="DcUnpacker.cs" />
+    <Compile Include="ResourcesUnpacker.cs" />
     <Compile Include="UnpackForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -79,6 +80,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
