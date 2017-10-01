@@ -34,7 +34,7 @@ namespace DataCenterUnpack
 
         }
 
-        public static void Unpack(string inputFileName, string outputBase, byte[] key, byte[] iv)
+        public static void Unpack(string inputFileName, string outputDirectory, byte[] key, byte[] iv)
         {
             var info = new List<string>();
 
@@ -71,7 +71,7 @@ namespace DataCenterUnpack
                 info.Add("decrypted.sha256 " + HashStream(decryptedData));
             }
 
-            var outputDecryptedName = Path.ChangeExtension(outputBase, "decrypted");
+            var outputDecryptedName = Path.ChangeExtension(outputDirectory, "decrypted");
             File.WriteAllBytes(outputDecryptedName, decryptedData.ToArray());
 
             // First 4 bytes are unknown. The next 2 bytes are the zlib header 789C. After that the raw deflate data follows.
@@ -86,7 +86,7 @@ namespace DataCenterUnpack
             int revision;
 
             // decompress using deflate
-            var tempFileName = Path.Combine(Path.GetDirectoryName(outputBase), "TempDataCenter");
+            var tempFileName = Path.Combine(Path.GetDirectoryName(outputDirectory), "TempDataCenter");
             using (var unpackedData = File.Create(tempFileName))
             {
                 using (var deflateStream = new DeflateStream(decryptedData, CompressionMode.Decompress, true))
@@ -103,8 +103,8 @@ namespace DataCenterUnpack
                     info.Insert(1, "revision " + revision);
                 }
             }
-            File.WriteAllLines(Path.ChangeExtension(outputBase, revision + ".dcinfo"), info);
-            File.Copy(tempFileName,Path.ChangeExtension(outputBase, revision + ".unpacked"),true);
+            File.WriteAllLines(Path.ChangeExtension(outputDirectory, revision + ".dcinfo"), info);
+            File.Copy(tempFileName,Path.ChangeExtension(outputDirectory, revision + ".unpacked"),true);
             File.Delete(tempFileName);
             File.Delete(outputDecryptedName);
         }
