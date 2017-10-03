@@ -1,5 +1,6 @@
-DataCenterUnpack:
+DataCenterUnpack UNOFFICIAL VERSION:
 
+* Decrypt DownloadedResources.dat and unpack custom images/restricted words list
 * Decrypt and decompress a data center file given key and IV
 * Extract the key/iv from a running Tera instance
 * Outputs an info file which contains relevant information about a data center, including revision, key/iv, file name, file sizes and SHA-256 hashes.
