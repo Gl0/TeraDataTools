@@ -1,33 +1,63 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace DataCenterUnpack
 {
     class ResourcesUnpacker
     {
-        //thx Caali
-        private static byte[] Key = new byte[32] { 0x1C, 0x24, 0x00, 0x00, 0x1F, 0x04, 0x00, 0x00, 0x72, 0xF4, 0x00, 0x00, 0x1D, 0x62, 0x00, 0x00, 0xBD, 0xA8, 0x00, 0x00, 0xDB, 0xA7, 0x00, 0x00, 0x01, 0x30, 0x00, 0x00, 0x33, 0x27, 0x00, 0x00 };
-        //thx Gl0 (https://github.com/Gl0)
-        private static byte[] MagicPattern = new byte[] { 0x95, 0x74, 0x4E, 0x47, 0x12, 0x0E };
+        struct catEntry
+        {
+            public Int32 size;
+            public Int32 offset;
+            public string fileName;
+        }
+
+        private static string ReadString(BinaryReader reader)
+        {
+            var builder = new StringBuilder();
+            while (true)
+            {
+                var c = reader.ReadChar();
+                if (c == 0) return builder.ToString();
+                builder.Append(c);
+            }
+        }
+
         public static void Unpack(string inputFileName, string outputDirectory)
         {
-
-            var resource = File.ReadAllBytes(inputFileName);
-            var searcher = new BoyerMoore(MagicPattern).SearchAll(resource);
-            var j = 0;
-            var laststart = 0;
-            for (var i = 0; i < resource.Length; ++i)
+            var xorTransform = new XorTransform();
+            var stream = new FileStream(inputFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            var reader = new BinaryReader(stream, Encoding.Unicode);
+            reader.BaseStream.Position = stream.Length - 8;
+            var offset = reader.ReadInt32();
+            reader.BaseStream.Position = stream.Length - offset - 8;
+            var files = new List<catEntry>();
+            using (MemoryStream catStream = new MemoryStream(reader.ReadBytes(offset)))
             {
-                resource[i] ^= Key[j % 32];
-                j++;
-                if (searcher.Contains(i))
+                var decrypted = new MemoryStream();
+                using (CryptoStream catCryptoStream = new CryptoStream(catStream, xorTransform, CryptoStreamMode.Read)) { catCryptoStream.CopyTo(decrypted); }
+                var catReader = new BinaryReader(decrypted, Encoding.Unicode);
+                catReader.BaseStream.Position = 0;
+                while (catReader.BaseStream.Position < catReader.BaseStream.Length-1)
                 {
-                    var block = new byte[i - laststart];
-                    Array.Copy(resource, laststart, block, 0, i - laststart);
-                    if (laststart != 0) block[0] = 0x89;
-                    File.WriteAllBytes(Path.Combine(outputDirectory, Path.GetFileNameWithoutExtension(inputFileName) + "." + laststart + (laststart == 0 ? ".txt" : ".png")), block);
-                    j = 1;
-                    laststart = i;
+                    catEntry file;
+                    file.size = catReader.ReadInt32();
+                    file.offset = catReader.ReadInt32();
+                    file.fileName = ReadString(catReader);
+                    files.Add(file);
+                }
+            }
+            foreach (var file in files)
+            {
+                reader.BaseStream.Position = file.offset;
+                using (MemoryStream fileStream = new MemoryStream(reader.ReadBytes(file.size)))
+                {
+                    var decrypted = new MemoryStream();
+                    using (CryptoStream catCryptoStream = new CryptoStream(fileStream, xorTransform, CryptoStreamMode.Read)) { catCryptoStream.CopyTo(decrypted); }
+                    File.WriteAllBytes(Path.Combine(outputDirectory,file.fileName),decrypted.ToArray());
                 }
             }
         }
