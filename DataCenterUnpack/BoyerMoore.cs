@@ -25,7 +25,7 @@ namespace DataCenterUnpack
             var patternLengthMinusOne = _patternLength - 1;
             fixed (byte* pointerToByteArray = byteArray)
             {
-                var pointerToByteArrayStartingIndex = pointerToByteArray + startIndex;
+                var pointerToByteArrayStartingIndex = pointerToByteArray;
                 fixed (byte* pointerToPattern = _pattern)
                 {
                     while (index <= limit)
@@ -48,7 +48,7 @@ namespace DataCenterUnpack
             List<int> list = new List<int>();
             fixed (byte* pointerToByteArray = byteArray)
             {
-                var pointerToByteArrayStartingIndex = pointerToByteArray + startIndex;
+                var pointerToByteArrayStartingIndex = pointerToByteArray;
                 fixed (byte* pointerToPattern = _pattern)
                 {
                     while (index <= limit)

@@ -99,7 +99,7 @@
             // 
             // DcFileFileDialog
             // 
-            this.DcFileFileDialog.Filter = "Data Center files|DataCenter_Final_*.dat|All Files|*.*";
+            this.DcFileFileDialog.Filter = "Data Center files|DataCenter_Final*.dat|All Files|*.*";
             // 
             // Key
             // 

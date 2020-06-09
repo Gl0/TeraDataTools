@@ -24,7 +24,7 @@ namespace DataCenterUnpack
         public static extern SafeProcessHandle OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
 
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool ReadProcessMemory(SafeProcessHandle hProcess, int lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
+        public static extern bool ReadProcessMemory(SafeProcessHandle hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int dwSize, ref int lpNumberOfBytesRead);
 
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern void GetSystemInfo(out SYSTEM_INFO lpSystemInfo);
@@ -32,6 +32,20 @@ namespace DataCenterUnpack
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern int VirtualQueryEx(SafeProcessHandle hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern int VirtualQueryEx(SafeProcessHandle hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION64 lpBuffer, uint dwLength);
+
+        [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool IsWow64Process([In] SafeProcessHandle hProcess, [Out] out bool lpSystemInfo);
+        public bool Is64Bit()
+        {
+            bool retVal;
+
+            IsWow64Process(processHandle, out retVal);
+
+            return !retVal;
+        }
 
         internal sealed class SafeProcessHandle : SafeHandleZeroOrMinusOneIsInvalid
         {
@@ -101,7 +115,27 @@ namespace DataCenterUnpack
                 return result;
             }
         }
-
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MEMORY_BASIC_INFORMATION64
+        {
+            public IntPtr BaseAddress;
+            public IntPtr AllocationBase;
+            public int AllocationProtect;
+            public UInt32 __alignment1;
+            public Int64 RegionSize;
+            public PageState State;
+            public PageFlags Protect;
+            public int Type;
+            public UInt32 __alignment2;
+            public override string ToString()
+            {
+                var result = string.Format("{0:x16} - {1:x16} {2}", BaseAddress, (long)BaseAddress + RegionSize, Protect);
+                if (State != PageState.Commit)
+                    result += " " + State;
+                return result;
+            }
+        }
+        private const Int32 ChunkSize = 2000000000;
         public struct SYSTEM_INFO
         {
             public ushort processorArchitecture;
@@ -119,7 +153,7 @@ namespace DataCenterUnpack
 
         private SafeProcessHandle processHandle;
 
-        public IEnumerable<MEMORY_BASIC_INFORMATION> MemoryRegions()
+        public IEnumerable<MEMORY_BASIC_INFORMATION64> MemoryRegions()
         {
             // getting minimum & maximum address
 
@@ -130,27 +164,47 @@ namespace DataCenterUnpack
             IntPtr proc_max_address = sys_info.maximumApplicationAddress;
 
             // saving the values as long ints so I won't have to do a lot of casts later
-            long proc_min_address_l = (long)proc_min_address;
-            long proc_max_address_l = (long)proc_max_address;
+            ulong proc_min_address_l = (ulong)proc_min_address;
+            ulong proc_max_address_l = (ulong)proc_max_address;
 
-            MEMORY_BASIC_INFORMATION mem_basic_info = new MEMORY_BASIC_INFORMATION();
+            MEMORY_BASIC_INFORMATION64 mem_basic_info = new MEMORY_BASIC_INFORMATION64();
 
-            long current = proc_min_address_l;
+            ulong current = proc_min_address_l;
             while (current < proc_max_address_l)
             {
                 var informationSize = VirtualQueryEx(processHandle, (IntPtr)current, out mem_basic_info, (uint)Marshal.SizeOf(mem_basic_info));
                 if (informationSize == 0)
                     throw new Win32Exception();
 
-                yield return mem_basic_info;
+                if (mem_basic_info.RegionSize<ChunkSize)
+                    yield return mem_basic_info;
+                else {
+                    Int64 remaining = mem_basic_info.RegionSize;
+                    UInt64 currentBase = unchecked((UInt64) (Int64) mem_basic_info.BaseAddress);
+                    while (remaining >= ChunkSize) {
+                        MEMORY_BASIC_INFORMATION64 chunk = mem_basic_info;
+                        chunk.BaseAddress = (IntPtr)(long)currentBase;
+                        chunk.RegionSize = ChunkSize;
+                        yield return chunk;
+                        remaining -= ChunkSize;
+                        currentBase = checked(currentBase + ChunkSize);
+                    }
+
+                    if (remaining > 0) {
+                        MEMORY_BASIC_INFORMATION64 chunk = mem_basic_info;
+                        chunk.BaseAddress = (IntPtr)(long)currentBase;
+                        chunk.RegionSize = ChunkSize;
+                        yield return chunk;
+                    }
+                }
 
                 // move to the next memory chunk
-                current += mem_basic_info.RegionSize;
+                current += (ulong)mem_basic_info.RegionSize;
             }
         }
 
 
-        public byte[] ReadMemory(int baseAddress, int size)
+        public byte[] ReadMemory(IntPtr baseAddress, int size)
         {
             var stream = new MemoryStream(size);
             ReadMemory(stream, baseAddress, size);
@@ -158,7 +212,7 @@ namespace DataCenterUnpack
             return stream.GetBuffer();
         }
 
-        public void ReadMemory(MemoryStream stream, int baseAddress, int size)
+        public void ReadMemory(MemoryStream stream, IntPtr baseAddress, int size)
         {
             stream.SetLength(size);
             int bytesRead = 0;
